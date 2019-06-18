@@ -88,7 +88,6 @@ class MainApp(tk.Frame):
 
         self.active_items = StringVar()
         self.active_items.set('20')
-        # self.active_items = 20
 
         # Instantiate Frames
         self.toolbar = Toolbar(self)  # instantiates class in order
@@ -107,17 +106,18 @@ class MainApp(tk.Frame):
         self.redraw(500)  # auto delayed loop for canvas draw
 
     def redraw(self, delay):
-        # itemconfig(tags='rect', fill='White')  # all items in rect{} tags='rect' as above
-        # reset all tags='rect'
+
         self.gridbox.canvas.itemconfig(
             "rect", fill="white", tags=('rect', 'white'))
 
+        # User_input is ShIShO
         try:
             items = int(self.active_items.get())  # Bound to Text Entry
+            hex_sample = random.sample(self.hex_values, items)
         except ValueError:
             items = 1
+            hex_sample = random.sample(self.hex_values, items)
 
-        hex_sample = random.sample(self.hex_values, items)
 
         # Random Fill --- for x no. of items
         for i in range(items):
@@ -128,9 +128,9 @@ class MainApp(tk.Frame):
 
             # Change fill for item_id
             self.gridbox.canvas.itemconfig(
-                item_id, fill=hex_sample[i], tags=('rect', 'black'))
+                item_id, fill=hex_sample[i], tags=('rect', hex_sample[i]))
 
-        # black_tiles = self.gridbox.canvas.find_withtag('black')
+        # these_tiles = self.gridbox.canvas.find_withtag(this_color)
 
         self.after(delay, lambda: self.redraw(delay))
 
