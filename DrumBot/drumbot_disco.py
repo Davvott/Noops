@@ -7,7 +7,6 @@ from psonic import *
 import random
 from DrumBot.drumbot import DrumBot
 
-
 # Initialize DrumBot!
 drumbot = DrumBot()
 
@@ -16,18 +15,10 @@ def main():
     continue_loop = True
     choice = "Y"
     while continue_loop and choice:
-        choice = input("Enter to quit. (N)ew loop: ").lower()
-        if choice == 'n':
-            drumbot.key_change()
+        syncsound()
+        cuesound()
+        input("Enter to continue")
 
-            sleep(0.25)
-            syncsound()
-            cuesound()
-
-def bpm_for_sleep(drumbot):
-    bpm = drumbot.bpm
-    sleep_duration = bpm/60
-    return sleep_duration
 
 # Sync and Cue threading on Play
 tick = Message()
