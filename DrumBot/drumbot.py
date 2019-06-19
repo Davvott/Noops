@@ -3,26 +3,6 @@ import requests
 import random
 URL = "https://api.noopschallenge.com/drumbot/patterns"
 
-# test_patterns = [
-#   { "name": "oontza" },
-#   { "name": "nipnop" },
-# ]
-
-# https://api.noopschallenge.com/drumbot/patterns/nipnop
-# {
-#   "name": "nipnop",
-#   "stepCount": 16,
-#   "beatsPerMinute": 92,
-#   "tracks": [
-#     {
-#       "instrument": "hihat",
-#       "steps": [ 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1 ]
-#     },
-#     ...
-#   ]
-# }
-
-
 class DrumBot:
     """Random pattern chosen from DrumBot for DrumBot"""
 
