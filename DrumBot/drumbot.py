@@ -20,7 +20,12 @@ class DrumBot:
                                                        [track.__str__() for track in self.tracks])
 
     def key_change(self):
+        """Reset Drumbot pattern"""
         self.pattern = random.choice(self.patterns)
+        self.info = self.get_drumbot_pattern()
+        self.step_count = self.info['stepCount']
+        self.bpm = self.info['beatsPerMinute']
+        self.tracks = [Track(track) for track in self.info['tracks']]
 
     @staticmethod
     def fetch_patterns():
@@ -29,7 +34,6 @@ class DrumBot:
         return result
 
     def get_drumbot_pattern(self):
-
         req = requests.get(URL + "/{}".format(self.pattern))
         result = req.json()
         return result
