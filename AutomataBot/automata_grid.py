@@ -66,12 +66,12 @@ class OptionsBox(tk.Frame):
         self.options_frame = ttk.LabelFrame(self.parent, text='Options', width=100, padding=(5, 5, 5, 5))
         self.options_frame.pack(side='right', fill='y', expand=True)
 
-        self.items_frame = ttk.LabelFrame(self.options_frame, text='Active Items', width=80, padding=(2, 2, 2, 2))
-        self.items_frame.pack(side='top', fill='x', expand=True)
+        # self.items_frame = ttk.LabelFrame(self.options_frame, text='Active Items', width=80, padding=(2, 2, 2, 2))
+        # self.items_frame.pack(side='top', fill='x', expand=True)
 
-        self.change_btn = ttk.Button(
-            self.options_frame, text='Switch', command=self.parent.change_state)
-        self.change_btn.pack(side='top', fill='x')
+        # self.change_btn = ttk.Button(
+        #     self.options_frame, text='Switch', command=self.parent.change_state)
+        # self.change_btn.pack(side='top', fill='x')
 
 class Main(tk.Frame):
     def __init__(self, parent, *args, **kwargs):

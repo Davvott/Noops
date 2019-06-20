@@ -1,6 +1,5 @@
 """Automata Bot Feeding Ground"""
 from tkinter import *
-import pprint
 from AutomataBot.automata_bot import AutomataBot
 from AutomataBot.automata_grid import MainApp
 
