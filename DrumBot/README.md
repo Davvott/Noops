@@ -1,7 +1,7 @@
 # DrumBot!
 ## Dependencies:
 * Python Sonic - https://github.com/gkvoelkl/python-sonic
-* Sonic Pi (Web download)
+* Sonic Pi - https://sonic-pi.net/
 ---
 Davvott's version of DrumBot utilizes python sonic and the pretty cool Sonic Pi.
 
