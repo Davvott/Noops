@@ -8,6 +8,7 @@ from AutomataBot.game_of_life import GameOfLife
 MAX_WIN_WIDTH = 1200
 MAX_WIN_HEIGHT = 900
 
+
 class Toolbar(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -71,7 +72,8 @@ class OptionsBox(tk.Frame):
 
         # self.change_btn = ttk.Button(
         #     self.options_frame, text='Switch', command=self.parent.change_state)
-        # self.change_btn.pack(side='top', fill='x')
+        # self.change_btn.pack(side='top', fill='x'
+
 
 class Main(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -79,7 +81,8 @@ class Main(tk.Frame):
 
 
 class MainApp(tk.Frame):
-    def __init__(self, parent, cells, cols, rows, *args, **kwargs):
+    """ZBuilds GUI for Game of Life, requires cols and rows"""
+    def __init__(self, parent, bot, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
 
         # initialize variables
@@ -92,9 +95,9 @@ class MainApp(tk.Frame):
 
         self.cols = IntVar()
         self.rows = IntVar()
-        self.cols = cols
-        self.rows = rows
-        self.cells = cells
+        self.cols = bot.cols
+        self.rows = bot.rows
+        self.bot = bot
 
         # Instantiate Frames
         self.toolbar = Toolbar(self)  # instantiates class in order
@@ -138,11 +141,10 @@ class MainApp(tk.Frame):
         cls_type = self._game_type.get()
 
         if cls_type == 'GameOfLife':
-            self.automata = GameOfLife(self.gridbox.grid, self.cells)
+            self.automata = GameOfLife(self.gridbox.grid, self.bot)
 
         self._game_type_text.set(cls_type)
         self.wipe_grid()
-
 
     def wipe_grid(self):
         # WIPE GRID --- reset all tags='rect'

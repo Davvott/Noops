@@ -16,16 +16,15 @@ class GameOfLife:
     Note: grid[x,y] = id, black_tiles = ((ids),...)
         coords must be matched with grid[x,y] to return [ids,]
     """
-    def __init__(self, grid, cells):
+    def __init__(self, grid, bot):
         self.grid = grid
-        # Assuming grid == Square!
-        self.y_height = len(cells)
-        self.x_width = len(cells[0])
+        self.y_height = len(bot.cells)
+        self.x_width = len(bot.cells[0])
 
-        # self.start_width = max(max(grid.keys()))
-        # self.start_height = max(max(grid.keys()))
+        self.initial_coord_ids = self.return_ids(bot.cells)
 
-        self.initial_coord_ids = self.return_ids(cells)
+        self.births = bot.birth
+        self.survive = bot.survival
 
     def count_neighbors(self, x, y, grid, black_tiles):
         """Given board, and x,y coords - counts surrounding neighbors
@@ -45,18 +44,17 @@ class GameOfLife:
                 next_x = x + delta_x  # = 1; -1; 0; 0; ...
                 next_y = y + delta_y  # = 0, 0; 1; -1; ...
 
-                # Only one step each delta_direction
-                # y_bound is KeyError for AutomataBot
                 if 0 <= next_y < y_bound and 0 <= next_x < x_bound:
 
-                    # if (next_x, next_y) coords in black_tiles
                     if grid[next_y, next_x] in black_tiles:
                         alive_neighbors += 1
 
         return alive_neighbors
 
     def next_state(self, black_tiles):
-        """Returns next state, given dict of grid {(x,y):id, ...}"""
+        """Returns next state, given dict of grid {(x,y):id, ...}
+        Returns a list of tile ids that will change for next_state
+        Grid takes care of flipping their color"""
         rtn_ids = []
 
         # If initial, use init_coords
@@ -71,14 +69,14 @@ class GameOfLife:
                 # count alive neighbors
                 alive_nei = self.count_neighbors(x=i, y=j, grid=self.grid, black_tiles=black_tiles)
 
-                if alive_nei < 2 and self.grid[j, i] in black_tiles:  # dies
+                # if not black_tile and alive_nei == birth: return #
+                # if black_tile and alive_nei not in survival: return
+                if alive_nei not in self.survive and self.grid[j, i] in black_tiles:  # dies
                     rtn_ids.append(self.grid[j, i])
-                elif alive_nei == 3 and self.grid[j, i] not in black_tiles:  # revives
-                    rtn_ids.append(self.grid[j, i])
-                elif alive_nei > 3 and self.grid[j, i] in black_tiles:  # starves
+                elif alive_nei in self.births and self.grid[j, i] not in black_tiles:  # birth
                     rtn_ids.append(self.grid[j, i])
                 else:
-                    pass  # no change
+                    pass  # survives!
 
         return rtn_ids
 
@@ -109,12 +107,3 @@ class GameOfLife:
             r.append(random.choice([0, 1]))
         state = [r[i:i + n] for i in range(0, len(r), n)]  # cool list slice comp
         return state
-
-    # def build_dead_state(cols=6, rows=6):
-    #     # board_state = [[None]*cols]* rows # creating linked lists!!!
-    #     state = []
-    #     for i in range(cols):
-    #         state.append([])
-    #         for j in range(rows):
-    #             state[i].append(0)
-    #     return state

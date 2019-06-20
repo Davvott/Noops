@@ -24,8 +24,8 @@ class AutomataBot:
         self.cols = len(self.cells[0])
 
     def __str__(self):
-        return "Name: {}, Birth: {}, Survival: {}, Life Span: {}, \nCells: {}, Cols: {}, Rows: {}".format(
-            self.name, self.birth, self.survival, self.generations, self.cells, self.rows, self.rows)
+        return "Name: {}, Birth: {}, Survival: {}, Life Span: {}, Cols: {}, Rows: {}".format(
+            self.name, self.birth, self.survival, self.generations, self.rows, self.rows)
 
     @staticmethod
     def fetch_rules():

@@ -3,17 +3,14 @@ from tkinter import *
 from AutomataBot.automata_bot import AutomataBot
 from AutomataBot.automata_grid import MainApp
 
-def main():
-    automata = AutomataBot()
-    print(automata)
 
-    rows = automata.rows
-    cols = automata.cols
+def main():
+    automatabot = AutomataBot()
+    print(automatabot)
 
     root = Tk()
     root.title('AutomataBot')
-    MainApp(root, cells=automata.cells, cols=cols, rows=rows).pack(side="top", fill="both", expand=True, padx=5, pady=5)
-
+    MainApp(root, bot=automatabot).pack(side="top", fill="both", expand=True, padx=5, pady=5)
     root.mainloop()
 
 # generate grid self.height, self.width
