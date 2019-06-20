@@ -46,14 +46,14 @@ class GridBox(tk.Frame):
 
         # Initialize Grid
         self.grid = {}
-        for column in range(_c):
-            for row in range(_r):
-                x1 = column * self.cellwidth
+        for row in range(_r):
+            for col in range(_c):
+                x1 = col * self.cellwidth
                 y1 = row * self.cellheight
                 x2 = x1 + self.cellwidth
                 y2 = y1 + self.cellheight
                 # Each grid item will return an item_id
-                self.grid[row, column] = self.canvas.create_rectangle(
+                self.grid[row, col] = self.canvas.create_rectangle(
                     x1, y1, x2, y2, fill="white", tags=("rect", 'white'))
 
 
@@ -79,7 +79,7 @@ class Main(tk.Frame):
 
 
 class MainApp(tk.Frame):
-    def __init__(self, parent, cells, cols=40, rows=40, *args, **kwargs):
+    def __init__(self, parent, cells, cols, rows, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
 
         # initialize variables

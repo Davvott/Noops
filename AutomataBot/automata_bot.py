@@ -20,12 +20,12 @@ class AutomataBot:
         self.cells = self.challenge['challenge']['cells']
         self.generations = self.challenge['challenge']['generations']
 
-        self.height = len(self.cells)
-        self.width = len(self.cells[0])
+        self.rows = len(self.cells)
+        self.cols = len(self.cells[0])
 
     def __str__(self):
         return "Name: {}, Birth: {}, Survival: {}, Life Span: {}, \nCells: {}, Cols: {}, Rows: {}".format(
-            self.name, self.birth, self.survival, self.generations, self.cells, self.width, self.height)
+            self.name, self.birth, self.survival, self.generations, self.cells, self.rows, self.rows)
 
     @staticmethod
     def fetch_rules():

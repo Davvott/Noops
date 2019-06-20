@@ -19,28 +19,13 @@ class GameOfLife:
     def __init__(self, grid, cells):
         self.grid = grid
         # Assuming grid == Square!
-        self.x_width = max(max(self.grid.keys()))
-        self.y_height = max(max(self.grid.keys()))
-        self.start_width = max(max(grid.keys()))
-        self.start_height = max(max(grid.keys()))
+        self.y_height = len(cells) - 1
+        self.x_width = len(cells[0]) - 1
+
+        # self.start_width = max(max(grid.keys()))
+        # self.start_height = max(max(grid.keys()))
 
         self.initial_coord_ids = self.return_ids(cells)
-
-
-    def initialize_board_state(self):
-        """Randomizes grid into list of lists.
-        Returns: state=[[1,0,1],...]
-        """
-        n = self.start_width
-        m = self.start_height
-        # n, m = 30, 30
-
-        total_length = n * m
-        r = []
-        for i in range(total_length):
-            r.append(random.choice([0, 1]))
-        state = [r[i:i + n] for i in range(0, len(r), n)]  # cool list slice comp
-        return state
 
     def count_neighbors(self, x, y, grid, black_tiles):
         """Given board, and x,y coords - counts surrounding neighbors
@@ -65,7 +50,7 @@ class GameOfLife:
                 if 0 <= next_y < y_bound and 0 <= next_x < x_bound:
 
                     # if (next_x, next_y) coords in black_tiles
-                    if grid[next_x, next_y] in black_tiles:
+                    if grid[next_y, next_x] in black_tiles:
                         alive_neighbors += 1
 
         return alive_neighbors
@@ -81,27 +66,17 @@ class GameOfLife:
             self.initial_coord_ids.clear()
             return rtn_ids
 
-        # Iterate over whole grid. Could be optimized for max black tiles.
-        # optimize by finding black tile ids in grid and limiting iteration
-        # SUbset of black_tiles in grid.keys()
-        ss = []
-        for key, val in self.grid.items():
-            if val in black_tiles:
-                ss.append(key)
-
-        max_keyval = max(self.grid.keys())
-        #
         for i in range(self.x_width):
             for j in range(self.y_height):
                 # count alive neighbors
-                alive_nei = self.count_neighbors(i, j, self.grid, black_tiles)
+                alive_nei = self.count_neighbors(x=i, y=j, grid=self.grid, black_tiles=black_tiles)
 
-                if alive_nei < 2 and self.grid[i, j] in black_tiles:  # dies
-                    rtn_ids.append(self.grid[i, j])
-                elif alive_nei == 3 and self.grid[i, j] not in black_tiles:  # revives
-                    rtn_ids.append(self.grid[i, j])
-                elif alive_nei > 3 and self.grid[i, j] in black_tiles:  # starves
-                    rtn_ids.append(self.grid[i, j])
+                if alive_nei < 2 and self.grid[j, i] in black_tiles:  # dies
+                    rtn_ids.append(self.grid[j, i])
+                elif alive_nei == 3 and self.grid[j, i] not in black_tiles:  # revives
+                    rtn_ids.append(self.grid[j, i])
+                elif alive_nei > 3 and self.grid[j, i] in black_tiles:  # starves
+                    rtn_ids.append(self.grid[j, i])
                 else:
                     pass  # no change
 
@@ -113,13 +88,27 @@ class GameOfLife:
         """
         rtn_list = []
         # iterate over entire initial
-        for i, col in enumerate(state):
-            for j, row_el in enumerate(col):
-                if row_el == 1:  # its a color tile
+        for i, row in enumerate(state):
+            for j, col_el in enumerate(row):
+                if col_el == 1:  # its a color tile
                     rtn_list.append(self.grid[i, j])  # get id
 
         return rtn_list
 
+    def initialize_board_state(self):
+        """Randomizes grid into list of lists.
+        Returns: state=[[1,0,1],...]
+        """
+        n = self.x_width
+        m = self.y_height
+        # n, m = 30, 30
+
+        total_length = n * m
+        r = []
+        for i in range(total_length):
+            r.append(random.choice([0, 1]))
+        state = [r[i:i + n] for i in range(0, len(r), n)]  # cool list slice comp
+        return state
 
     # def build_dead_state(cols=6, rows=6):
     #     # board_state = [[None]*cols]* rows # creating linked lists!!!

@@ -8,8 +8,8 @@ def main():
     automata = AutomataBot()
     print(automata)
 
-    cols = automata.width
-    rows = automata.height
+    rows = automata.rows
+    cols = automata.cols
 
     root = Tk()
     root.title('AutomataBot')
