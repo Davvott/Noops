@@ -19,8 +19,8 @@ class GameOfLife:
     def __init__(self, grid, cells):
         self.grid = grid
         # Assuming grid == Square!
-        self.y_height = len(cells) - 1
-        self.x_width = len(cells[0]) - 1
+        self.y_height = len(cells)
+        self.x_width = len(cells[0])
 
         # self.start_width = max(max(grid.keys()))
         # self.start_height = max(max(grid.keys()))

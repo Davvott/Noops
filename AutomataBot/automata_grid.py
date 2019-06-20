@@ -96,8 +96,6 @@ class MainApp(tk.Frame):
         self.rows = rows
         self.cells = cells
 
-
-
         # Instantiate Frames
         self.toolbar = Toolbar(self)  # instantiates class in order
         self.options_box = OptionsBox(self)
