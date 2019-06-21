@@ -5,16 +5,18 @@
 Meet AutomataBot:
 https://noopschallenge.com/challenges/automatabot
 ---
-## v.01
-Fixed an old game of life file to render AutomataBot fetch requests. 
+## v.05
+Major refactor, separating logic out of GUI into AutomataBot class. 
+
+A lot of work to tidy up old crappy code! 
 
 Built on Tkinter. Should be good to go for Python 3.6
 
 ## TODO
-* I should probably separate the GoL logic code from the TkGUI code ...
 * Implement generations 'runtime' 
-* Export game-state to post back for the Challenge glory!
-* Maybe after dinner...
+* Export game-state to post back for the Challenge glory
+* (Check if I'm getting it correct)
+
 
 ## Also...
 Name: inverse, Birth: [0, 1, 2, 3, 4, 5, 6, 7, 8], Survival: [3, 4, 6, 7, 8], Life Span: 7, Cols: 33, Rows: 33
