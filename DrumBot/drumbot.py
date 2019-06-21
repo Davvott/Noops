@@ -25,6 +25,7 @@ class DrumBot:
         self.info = self.get_drumbot_pattern()
         self.step_count = self.info['stepCount']
         self.bpm = self.info['beatsPerMinute']
+        self.sleep_time = 60 / self.bpm
         self.tracks = [Track(track) for track in self.info['tracks']]
 
     @staticmethod
