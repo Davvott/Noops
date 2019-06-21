@@ -5,9 +5,9 @@ https://github.com/gkvoelkl/python-sonic
 """
 from psonic import *
 import random
-from DrumBot.drumbot import DrumBot
+from my_drumbot.drumbot import DrumBot
 
-# Initialize DrumBot!
+# Initialize my_drumbot!
 drumbot = DrumBot()
 
 

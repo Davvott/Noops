@@ -4,7 +4,7 @@ import random
 URL = "https://api.noopschallenge.com/drumbot/patterns"
 
 class DrumBot:
-    """Random pattern chosen from DrumBot for DrumBot"""
+    """Random pattern chosen from my_drumbot for my_drumbot"""
 
     def __init__(self):
 
