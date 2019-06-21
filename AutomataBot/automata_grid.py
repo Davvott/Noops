@@ -2,10 +2,8 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter import StringVar
-import random
-from AutomataBot.game_of_life import GameOfLife
 
-MAX_WIN_WIDTH = 1200
+MAX_WIN_WIDTH = 1100
 MAX_WIN_HEIGHT = 900
 
 
@@ -54,7 +52,7 @@ class GridBox(tk.Frame):
                 x2 = x1 + self.cellwidth
                 y2 = y1 + self.cellheight
                 # Each grid item will return an item_id
-                self.grid[row, col] = self.canvas.create_rectangle(
+                self.grid[(row, col)] = self.canvas.create_rectangle(
                     x1, y1, x2, y2, fill="white", tags=("rect", 'white'))
 
 
@@ -87,74 +85,78 @@ class MainApp(tk.Frame):
 
         # initialize variables
         self._game_type = StringVar()
-        self._game_type.set('GameOfLife')
+        title = "Game of Life\n {}".format(bot.__str__())
+        self._game_type.set(title)
         self._game_type_text = StringVar()
-        self._game_type_text.set(self._game_type.get())  # update to type of Automata loaded
+        self._game_type_text.set(self._game_type.get())
         self._delay = IntVar()
-        self._delay = 700
+        self._delay = 1000
 
         self.cols = IntVar()
         self.rows = IntVar()
         self.cols = bot.cols
         self.rows = bot.rows
-        self.bot = bot
+        self.year = 0
 
         # Instantiate Frames
         self.toolbar = Toolbar(self)  # instantiates class in order
-        self.options_box = OptionsBox(self)
+        # self.options_box = OptionsBox(self)
         self.gridbox = GridBox(self)
         self.main = Main(self)
 
         self.toolbar.pack(side="top", fill="x", padx=5, pady=5)
         self.gridbox.pack(side='top', fill='both', expand=True, padx=5, pady=5)
-        self.options_box.pack(side="right", fill="y")
+        # self.options_box.pack(side="right", fill="y")
         self.main.pack(side="right", fill="both", expand=True)
+
+        self.automata = bot
 
         self.run()
 
     def run(self):
-        self.change_state()
         self.wipe_grid()
-        self.redraw(self._delay)
+        self.initialise_grid()
+        self.after(self._delay, lambda: self.redraw(self._delay))
+
+        # self.redraw(self._delay)
 
     def redraw(self, delay):
         # itemconfig(tags='rect', fill='White')  # all items in rect{} tags='rect' as above
         # type(black_tiles) = <class 'tuple'> of item_ids
-        # grid = dict{(x, y): item_id,}
+        # grid -> dict{(x, y): item_id,}
 
-        black_tiles = self.gridbox.canvas.find_withtag('black')
-        tiles_to_change = self.automata.next_state(black_tiles)
+        alive_cells = self.gridbox.canvas.find_withtag('black')
+        tiles_to_change = self.automata.next_state()  # list
 
-        for tile in tiles_to_change:
-            # item_id = self.gridbox.grid[tile]
-            if tile not in black_tiles:
+        # Need item_ids to flip
+        # Automata.next_state should just return list of pairs [row, col] and ids gathered here
+
+        for tile in tiles_to_change:  # for each pair in tiles
+            item_id = self.gridbox.grid[(tile[0], tile[1])]
+
+            if item_id not in alive_cells:
                 self.gridbox.canvas.itemconfig(
-                    tile, fill="black", tags=('rect', 'black'))
+                    item_id, fill="black", tags=('rect', 'black'))
             else:
                 self.gridbox.canvas.itemconfig(
-                    tile, fill="white", tags=('rect', 'white'))
+                    item_id, fill="white", tags=('rect', 'white'))
+
+        self.year += 1
+        if self.year == self.automata.generations:
+            # export grid
+            pass
 
         self.after(delay, lambda: self.redraw(delay))
 
-    def change_state(self):
-        """Basic Switch, updates automata Class, wipes grid, continues redrawing"""
-        cls_type = self._game_type.get()
+    def initialise_grid(self):
+        """Initialises Grid from automata cell state"""
+        alive_cells = self.automata.get_alive_cells()
 
-        if cls_type == 'GameOfLife':
-            self.automata = GameOfLife(self.gridbox.grid, self.bot)
-
-        self._game_type_text.set(cls_type)
-        self.wipe_grid()
+        for tile in alive_cells:
+            item_id = self.gridbox.grid[(tile[0], tile[1])]
+            self.gridbox.canvas.itemconfig(item_id, fill="black", tags=('rect', 'black'))
 
     def wipe_grid(self):
-        # WIPE GRID --- reset all tags='rect'
+        """WIPE GRID --- reset all items with tag='rect'"""
         self.gridbox.canvas.itemconfig(
             "rect", fill="white", tags=('rect', 'white'))
-
-
-if __name__ == "__main__":
-    root = Tk()
-    root.title('AutomataBot')
-    MainApp(root).pack(side="top", fill="both", expand=True, padx=5, pady=5)
-
-    root.mainloop()

@@ -11,7 +11,12 @@ Fixed an old game of life file to render AutomataBot fetch requests.
 Built on Tkinter. Should be good to go for Python 3.6
 
 ## TODO
-* Implement birth and survival constraints
+* I should probably separate the GoL logic code from the TkGUI code ...
 * Implement generations 'runtime' 
 * Export game-state to post back for the Challenge glory!
 * Maybe after dinner...
+
+## Also...
+Name: inverse, Birth: [0, 1, 2, 3, 4, 5, 6, 7, 8], Survival: [3, 4, 6, 7, 8], Life Span: 7, Cols: 33, Rows: 33
+
+This set of rules is possibly one of the coolest things I've seen in a while. 
