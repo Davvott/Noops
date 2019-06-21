@@ -9,7 +9,8 @@ from my_drumbot.drumbot import DrumBot
 
 # Initialize my_drumbot!
 drumbot = DrumBot()
-
+print(drumbot)
+# No Sound? Startup Sonic Pi!
 
 def main():
     continue_loop = True
