@@ -13,9 +13,7 @@ A lot of work to tidy up old crappy code!
 Built on Tkinter. Should be good to go for Python 3.6
 
 ## TODO
-* Implement generations 'runtime' 
-* Export game-state to post back for the Challenge glory
-* (Check if I'm getting it correct)
+* ... ? Popup for success? Write on iterations of challenges to hdd?
 
 
 ## Also...

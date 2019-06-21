@@ -3,7 +3,9 @@ import requests
 import random
 
 URL = "https://api.noopschallenge.com/automatabot/rules"
-URL_challange ="https://api.noopschallenge.com/automatabot/challenges/new"
+URL_challenge = "https://api.noopschallenge.com/automatabot/challenges/new"
+URL_post = "https://api.noopschallenge.com{}"
+
 
 class AutomataBot:
 
@@ -24,8 +26,8 @@ class AutomataBot:
         self.cols = len(self.cells[0])
 
     def __str__(self):
-        return "Name: {}, Birth: {}, Survival: {}, Life Span: {}, Cols: {}, Rows: {}".format(
-            self.name, self.birth, self.survival, self.generations, self.cols, self.rows)
+        return "Name: {}, Birth: {}, Survival: {}, Life Span: {}, Cols: {}, Rows: {}\n{}".format(
+            self.name, self.birth, self.survival, self.generations, self.cols, self.rows, self.challengepath)
 
     @staticmethod
     def fetch_rules():
@@ -33,8 +35,9 @@ class AutomataBot:
         result = req.json()
         return result
 
-    def fetch_challange(self):
-        req = requests.get(URL_challange)
+    @staticmethod
+    def fetch_challange():
+        req = requests.get(URL_challenge)
         result = req.json()
         return result
 
@@ -63,11 +66,20 @@ class AutomataBot:
         for cell in dead_cells:
             self.cells[cell[0]][cell[1]] = 0
         for cell in live_cells:
-             self.cells[cell[0]][cell[1]] = 1
+            self.cells[cell[0]][cell[1]] = 1
 
         flip_cells = dead_cells + live_cells
-
+        self.generations -= 1
+        if self.generations == 0:
+            self.send_challenge_solution()
         return flip_cells
+
+    def send_challenge_solution(self):
+        # POST self.cells? to URL
+        post = URL_post.format(self.challengepath)
+        print(post)
+        req = requests.post(post, json=self.cells)
+        print(req.json())
 
     def count_neighbors(self, x, y, alive):
         """Given board, and x,y coords - counts surrounding neighbors

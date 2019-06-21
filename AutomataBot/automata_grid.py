@@ -118,8 +118,6 @@ class MainApp(tk.Frame):
         self.initialise_grid()
         self.after(self._delay, lambda: self.redraw(self._delay))
 
-        # self.redraw(self._delay)
-
     def redraw(self, delay):
         # itemconfig(tags='rect', fill='White')  # all items in rect{} tags='rect' as above
         # type(black_tiles) = <class 'tuple'> of item_ids
