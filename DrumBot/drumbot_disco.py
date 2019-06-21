@@ -9,7 +9,7 @@ from DrumBot.drumbot import DrumBot
 
 # Initialize DrumBot!
 drumbot = DrumBot()
-
+print(drumbot)
 
 def main():
     continue_loop = True
@@ -57,7 +57,7 @@ def initialize_drumbot(drumbot):
     # Gather name globals for Sonic Pi
     samples = []
     for key in [key for key in globals().keys()]:
-        if "DRUM" in key or "ELEC" in key:
+        if "BD" in key:
             samples.append(key)
     # Normalise naming
     for track in drumbot.tracks:
