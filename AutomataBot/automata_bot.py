@@ -1,4 +1,4 @@
-"""Automata Bot is ready"""
+"""AutomataBot is ready"""
 import requests
 import random
 
@@ -8,11 +8,11 @@ URL_post = "https://api.noopschallenge.com{}"
 
 
 class AutomataBot:
-
+    """Automata Class. Fetches rules and challenge and initializes from there. """
     def __init__(self):
         self.download = self.fetch_rules()
         self.rules = random.choice(self.download)
-        self.challenge = self.fetch_challange()
+        self.challenge = self.fetch_challenge()
         self.challengepath = self.challenge['challengePath']
 
         self.name = self.challenge['challenge']['rules']['name']
@@ -21,7 +21,7 @@ class AutomataBot:
 
         self.cells = self.challenge['challenge']['cells']
         self.generations = self.challenge['challenge']['generations']
-
+        self.success = False
         self.rows = len(self.cells)
         self.cols = len(self.cells[0])
 
@@ -31,36 +31,37 @@ class AutomataBot:
 
     @staticmethod
     def fetch_rules():
+        """You gotta know the rules to break them"""
         req = requests.get(URL)
         result = req.json()
         return result
 
     @staticmethod
-    def fetch_challange():
+    def fetch_challenge():
+        """Ready!"""
         req = requests.get(URL_challenge)
         result = req.json()
         return result
 
     def next_state(self):
-        """Returns next state, given dict of grid {(x,y):id, ...}
-        Returns a list of tile ids that will change for next_state
-        Grid takes care of flipping their color"""
+        """Parses next game state, returns a list of tile coordinates that will change for next_state
+        Tk Grid takes care of flipping their color"""
         dead_cells = []
         live_cells = []
         alive_cells = self.get_alive_cells()  # returns list of pairs
 
         for j in range(self.rows):
             for i in range(self.cols):
-                # count alive neighbors
+                # Count your blessings
                 alive_nei = self.count_neighbors(x=i, y=j, alive=alive_cells)  # returns int
-
+                # Does it die?
                 if alive_nei not in self.survival and [j, i] in alive_cells:  # dies
                     dead_cells.append([j, i])
-
+                # Does it arise?
                 elif alive_nei in self.birth and [j, i] not in alive_cells:  # birth
                     live_cells.append([j, i])
                 else:
-                    pass  # survives!
+                    pass  # I will survive!
 
         # set cells to next state
         for cell in dead_cells:
@@ -68,22 +69,29 @@ class AutomataBot:
         for cell in live_cells:
             self.cells[cell[0]][cell[1]] = 1
 
-        flip_cells = dead_cells + live_cells
         self.generations -= 1
         if self.generations == 0:
             self.send_challenge_solution()
+
+        flip_cells = dead_cells + live_cells
         return flip_cells
 
     def send_challenge_solution(self):
-        # POST self.cells? to URL
+        """To win, or not to win. That is the challenge."""
         post = URL_post.format(self.challengepath)
         print(post)
         req = requests.post(post, json=self.cells)
-        print(req.json())
+        r = req.json()
+        print(r)
+        try:
+            if r['result'] == 'correct':
+                self.success = True
+        except KeyError as error:
+            print(error)
 
     def count_neighbors(self, x, y, alive):
-        """Given board, and x,y coords - counts surrounding neighbors
-        Returns: count of alive_neighbors
+        """Hey Neighbour, with x,y coords and list of live ones - counts surrounding neighbors
+        Returns: account of alive_neighbors, get it?
         """
         # Index values for grid
         x_bound = self.cols
@@ -106,8 +114,7 @@ class AutomataBot:
         return alive_neighbors
 
     def get_alive_cells(self):
-        """Returns list of pairs of [(y, x),...]
-        """
+        """Returns list of pairs of [[y, x],...]"""
         coords = []
         # iterate over entire initial
         for j, row in enumerate(self.cells):

@@ -16,7 +16,7 @@ class Toolbar(tk.Frame):
         self.toolbar_frame.pack(side='top', fill='x')
 
         self.toolbar = ttk.Label(
-            self.toolbar_frame, textvariable=self.parent._game_type_text, padding=(2, 2, 2, 2),
+            self.toolbar_frame, textvariable=self.parent._game_type, padding=(2, 2, 2, 2),
             justify='center')
         self.toolbar.pack(side='top', fill='y', anchor="n")
 
@@ -65,13 +65,6 @@ class OptionsBox(tk.Frame):
         self.options_frame = ttk.LabelFrame(self.parent, text='Options', width=100, padding=(5, 5, 5, 5))
         self.options_frame.pack(side='right', fill='y', expand=True)
 
-        # self.items_frame = ttk.LabelFrame(self.options_frame, text='Active Items', width=80, padding=(2, 2, 2, 2))
-        # self.items_frame.pack(side='top', fill='x', expand=True)
-
-        # self.change_btn = ttk.Button(
-        #     self.options_frame, text='Switch', command=self.parent.change_state)
-        # self.change_btn.pack(side='top', fill='x'
-
 
 class Main(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -79,7 +72,7 @@ class Main(tk.Frame):
 
 
 class MainApp(tk.Frame):
-    """ZBuilds GUI for Game of Life, requires cols and rows"""
+    """Builds GUI for Game of Life, requires Automata class"""
     def __init__(self, parent, bot, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
 
@@ -87,8 +80,7 @@ class MainApp(tk.Frame):
         self._game_type = StringVar()
         title = "Game of Life\n {}".format(bot.__str__())
         self._game_type.set(title)
-        self._game_type_text = StringVar()
-        self._game_type_text.set(self._game_type.get())
+
         self._delay = IntVar()
         self._delay = 1000
 
@@ -119,17 +111,13 @@ class MainApp(tk.Frame):
         self.after(self._delay, lambda: self.redraw(self._delay))
 
     def redraw(self, delay):
-        # itemconfig(tags='rect', fill='White')  # all items in rect{} tags='rect' as above
         # type(black_tiles) = <class 'tuple'> of item_ids
-        # grid -> dict{(x, y): item_id,}
+        # grid -> dict{(y, x): item_id,}
 
         alive_cells = self.gridbox.canvas.find_withtag('black')
         tiles_to_change = self.automata.next_state()  # list
 
-        # Need item_ids to flip
-        # Automata.next_state should just return list of pairs [row, col] and ids gathered here
-
-        for tile in tiles_to_change:  # for each pair in tiles
+        for tile in tiles_to_change:
             item_id = self.gridbox.grid[(tile[0], tile[1])]
 
             if item_id not in alive_cells:
@@ -138,11 +126,6 @@ class MainApp(tk.Frame):
             else:
                 self.gridbox.canvas.itemconfig(
                     item_id, fill="white", tags=('rect', 'white'))
-
-        self.year += 1
-        if self.year == self.automata.generations:
-            # export grid
-            pass
 
         self.after(delay, lambda: self.redraw(delay))
 
@@ -155,6 +138,6 @@ class MainApp(tk.Frame):
             self.gridbox.canvas.itemconfig(item_id, fill="black", tags=('rect', 'black'))
 
     def wipe_grid(self):
-        """WIPE GRID --- reset all items with tag='rect'"""
+        """WIPE GRID - reset all items with tag='rect'"""
         self.gridbox.canvas.itemconfig(
             "rect", fill="white", tags=('rect', 'white'))
