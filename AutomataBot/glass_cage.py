@@ -13,11 +13,4 @@ def main():
     MainApp(root, bot=automatabot).pack(side="top", fill="both", expand=True, padx=5, pady=5)
     root.mainloop()
 
-# generate grid self.height, self.width
-
-# Populate grid according to cells
-# for each list in cells, and for each cell in list:
-# iterate through grid and color black if == 1
-
-
 main()
