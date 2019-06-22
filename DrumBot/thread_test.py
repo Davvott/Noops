@@ -7,17 +7,18 @@ from psonic import *
 import random
 from DrumBot.drumbot import DrumBot
 from threading import Thread, Condition, Event
+
 # Initialize DrumBot!
-tick = Message()
+# tick = Message()  # tick.sync(),tick.cue() inside @in_thread
 
 
 def main():
     drumbot = DrumBot()
     initialize_drumbot(drumbot)
-    condition = Condition()
-    choice = ""
 
+    condition = Condition()
     stop_event = Event()
+    choice = ""
     while not choice:
         print(drumbot)
 
@@ -31,18 +32,16 @@ def main():
             stop_event.set()
 
             while stop_event.is_set():
-                pass
-            drumbot.key_change()
-            initialize_drumbot(drumbot)
+                next_bot = DrumBot()
+                initialize_drumbot(next_bot)
 
-
+            drumbot = next_bot
 
 
 # Sync and Cue threading on Play
 # TODO: Lag in stop_event signal, perhaps implement another stop_event in functions?
 def syncsound(condition, stop_event, bot):
     # IF tick or condition inside while loop, looping suffers possibly due to for loops
-    # tick.sync
 
     with condition:
         condition.wait()
@@ -57,7 +56,7 @@ def syncsound(condition, stop_event, bot):
 
 
 def cuesound(condition, stop_event, bot):
-    # tick.cue()
+
     with condition:
         condition.notifyAll()
 
